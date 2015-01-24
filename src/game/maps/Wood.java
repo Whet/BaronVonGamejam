@@ -8,9 +8,9 @@ import javax.imageio.ImageIO;
 
 import watoydoEngine.designObjects.display.ButtonSingle;
 import watoydoEngine.io.ReadWriter;
-import game.GameChoiceMenu;
+import game.GameMenu;
 
-public class Wood extends GameChoiceMenu {
+public class Wood extends GameMenu {
 
 	@Override
 	protected BufferedImage getBackgroundImage() {

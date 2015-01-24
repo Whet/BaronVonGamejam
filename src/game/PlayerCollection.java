@@ -11,8 +11,14 @@ public class PlayerCollection {
 		return instance;
 	}
 
+	private Player[] players;
+	
+	private PlayerCollection() {
+		this.players = new Player[]{new Player(), new Player(), new Player(), new Player(), new Player()};
+	}
+	
 	public Player getPlayer(int playerNumber) {
-		return null;
+		return this.players[playerNumber];
 	}
 	
 }

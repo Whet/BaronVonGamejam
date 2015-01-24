@@ -17,12 +17,13 @@ import watoydoEngine.hardPanes.HardPaneDefineable;
 import watoydoEngine.io.ReadWriter;
 import watoydoEngine.workings.displayActivity.ActivePane;
 
-public abstract class GameChoiceMenu implements HardPaneDefineable {
+public abstract class GameMenu implements HardPaneDefineable {
 
-	private static final int GOD_ICON_SPACING = 100;
+	private static final int PLAYER_ICON_SPACING = 100;
 	private static final int CHOICE_WIDTH_SPACING = 10;
 	private static final int CHOICE_HEIGHT_SPACING = 60;
 	private static final double CHOICE_SCREEN_PERCENT = 0.7;
+	private static final int STAT_PLACING = 68;
 	
 	@Override
 	public void load(Crowd crowd) throws FileNotFoundException, IOException {
@@ -44,11 +45,29 @@ public abstract class GameChoiceMenu implements HardPaneDefineable {
 
 		titleText.setColour(Color.black);
 		
-		player1Image.setLocation(GOD_ICON_SPACING, GOD_ICON_SPACING * 2);
-		player2Image.setLocation(screenWidth - player2Image.getImage().getWidth() - GOD_ICON_SPACING, GOD_ICON_SPACING * 2);
-		player3Image.setLocation(GOD_ICON_SPACING, screenHeight - player3Image.getImage().getHeight() - GOD_ICON_SPACING);
-		player4Image.setLocation(screenWidth - player4Image.getImage().getWidth() - GOD_ICON_SPACING, screenHeight - player4Image.getImage().getHeight() - GOD_ICON_SPACING);
-		player5Image.setLocation(screenWidth/2 - player5Image.getImage().getWidth()/2, GOD_ICON_SPACING * 2);
+		player1Image.setLocation(PLAYER_ICON_SPACING, PLAYER_ICON_SPACING * 2);
+		player2Image.setLocation(screenWidth - player2Image.getImage().getWidth() - PLAYER_ICON_SPACING, PLAYER_ICON_SPACING * 2);
+		player3Image.setLocation(PLAYER_ICON_SPACING, screenHeight - player3Image.getImage().getHeight() - PLAYER_ICON_SPACING);
+		player4Image.setLocation(screenWidth - player4Image.getImage().getWidth() - PLAYER_ICON_SPACING, screenHeight - player4Image.getImage().getHeight() - PLAYER_ICON_SPACING);
+		player5Image.setLocation(screenWidth/2 - player5Image.getImage().getWidth()/2, PLAYER_ICON_SPACING * 2);
+		
+		final StatsUi statsPlayer1 = new StatsUi();
+		final StatsUi statsPlayer2 = new StatsUi();
+		final StatsUi statsPlayer3 = new StatsUi();
+		final StatsUi statsPlayer4 = new StatsUi();
+		final StatsUi statsPlayer5 = new StatsUi();
+		
+		statsPlayer1.setLocation(PLAYER_ICON_SPACING, PLAYER_ICON_SPACING * 2 - STAT_PLACING);
+		statsPlayer2.setLocation(screenWidth - player2Image.getImage().getWidth() - PLAYER_ICON_SPACING, PLAYER_ICON_SPACING * 2 - STAT_PLACING);
+		statsPlayer3.setLocation(PLAYER_ICON_SPACING, screenHeight - player3Image.getImage().getHeight() - PLAYER_ICON_SPACING - STAT_PLACING);
+		statsPlayer4.setLocation(screenWidth - player4Image.getImage().getWidth() - PLAYER_ICON_SPACING, screenHeight - player4Image.getImage().getHeight() - PLAYER_ICON_SPACING - STAT_PLACING);
+		statsPlayer5.setLocation(screenWidth/2 - player5Image.getImage().getWidth()/2, PLAYER_ICON_SPACING * 2 - STAT_PLACING);
+		
+		statsPlayer1.setPlayer(playerCollection.getPlayer(0));
+		statsPlayer2.setPlayer(playerCollection.getPlayer(1));
+		statsPlayer3.setPlayer(playerCollection.getPlayer(2));
+		statsPlayer4.setPlayer(playerCollection.getPlayer(3));
+		statsPlayer5.setPlayer(playerCollection.getPlayer(4));
 		
 		final ButtonSingle optionOne = getOptionOne();
 		final ButtonSingle optionTwo = getOptionTwo();
@@ -63,7 +82,7 @@ public abstract class GameChoiceMenu implements HardPaneDefineable {
 		optionTwo.setLocation(screenMidX + CHOICE_WIDTH_SPACING, screenHeight * CHOICE_SCREEN_PERCENT);
 		optionThree.setLocation(screenMidX - buttonWidth/2 , screenHeight * CHOICE_SCREEN_PERCENT + CHOICE_HEIGHT_SPACING);
 		
-		int startAlpha = 0;
+		int startAlpha = 1;
 
 		backgroundImage.setAlpha(startAlpha);
 		
@@ -71,7 +90,7 @@ public abstract class GameChoiceMenu implements HardPaneDefineable {
 		player2Image.setAlpha(startAlpha);
 		player3Image.setAlpha(startAlpha);
 		player4Image.setAlpha(startAlpha);
-//		player5Image.setAlpha(startAlpha);
+		player5Image.setAlpha(startAlpha);
 		
 		optionOne.setAlpha(startAlpha);
 		optionTwo.setAlpha(startAlpha);
@@ -86,6 +105,12 @@ public abstract class GameChoiceMenu implements HardPaneDefineable {
 		crowd.addDisplayItem(player3Image);
 		crowd.addDisplayItem(player4Image);
 		crowd.addDisplayItem(player5Image);
+		
+		crowd.addDisplayItem(statsPlayer1);
+		crowd.addDisplayItem(statsPlayer2);
+		crowd.addDisplayItem(statsPlayer3);
+		crowd.addDisplayItem(statsPlayer4);
+		crowd.addDisplayItem(statsPlayer5);
 		
 		crowd.addButton(optionOne);
 		crowd.addButton(optionTwo);
@@ -113,6 +138,12 @@ public abstract class GameChoiceMenu implements HardPaneDefineable {
 			
 			@Override
 			public void run() {
+				
+				if(optionThree.getAlpha() == 1) {
+					animationTimer.cancel();
+					return;
+				}
+				
 				milliseconds++;
 				computeAnimation();
 				
