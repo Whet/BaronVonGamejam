@@ -5,7 +5,8 @@ import game.cards.Card;
 public class TurnProcess {
 
 	public Card getCard() {
-		return null;
+		return new Card("NAME","A long time ago,@nI saw a bird@nAnus") {
+		};
 	}
 
 }

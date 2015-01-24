@@ -10,19 +10,33 @@ import watoydoEngine.workings.displayActivity.ActivePane;
 public abstract class Card {
 
 	private List<ButtonSingle> choices;
-	private Text nameText;
-	private Text descriptionText;
+	private String nameText;
+	private String descriptionText;
 	
 	public Card(String name, String description) {
 		
 		int width = ActivePane.getInstance().getWidth();
 		int height = ActivePane.getInstance().getHeight();
 		
-		this.nameText = new Text(width / 2, height/4, name);
-		this.descriptionText = new Text(width / 2, height/4 + 30, description);
+		this.nameText = name;
+		this.descriptionText = description;
 		this.choices = new ArrayList<ButtonSingle>();
 	}
-	
-	
-	
+
+	public String getNameText() {
+		return nameText;
+	}
+
+	public String getDescriptionText() {
+		return descriptionText;
+	}
+
+	public void setNameText(String nameText) {
+		this.nameText = nameText;
+	}
+
+	public void setDescriptionText(String descriptionText) {
+		this.descriptionText = descriptionText;
+	}
+
 }

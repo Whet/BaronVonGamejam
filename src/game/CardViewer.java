@@ -6,13 +6,21 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.imageio.ImageIO;
 
 import watoydoEngine.designObjects.actions.MouseRespondable;
 import watoydoEngine.designObjects.display.ButtonSingle;
 import watoydoEngine.designObjects.display.Displayable;
+import watoydoEngine.designObjects.display.ImageSingle;
+import watoydoEngine.designObjects.display.Text;
 import watoydoEngine.display.tweens.TweenDefinable;
+import watoydoEngine.io.ReadWriter;
+import watoydoEngine.workings.displayActivity.ActivePane;
 
 public class CardViewer implements Displayable, MouseRespondable {
 
@@ -22,16 +30,39 @@ public class CardViewer implements Displayable, MouseRespondable {
 	
 	private Set<ButtonSingle> buttons;
 	
+	private ImageSingle cardBack;
+	private Card currentCard;
+	private Text cardName;
+	private Text cardDescription;
 	
 	public CardViewer(ButtonSingle optionOne, ButtonSingle optionTwo, ButtonSingle optionThree) {
 		this.visible= false;
 		this.z = 0;
 		this.active = false;
 		
+		try {
+			cardBack = new ImageSingle(ImageIO.read(ReadWriter.getResourceAsInputStream("cardBackPlaceholder.png")));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		buttons = new HashSet<>();
 		buttons.add(optionOne);
 		buttons.add(optionTwo);
 		buttons.add(optionThree);
+		
+		int centreX = ActivePane.getInstance().getWidth() / 2;
+		int centreY = ActivePane.getInstance().getHeight() / 2;
+		
+		this.cardBack.setLocation(centreX - cardBack.getSize()[0] / 2, centreY - cardBack.getSize()[1] / 2);
+
+		cardName = new Text((int)(centreX - this.cardBack.getSize()[0] / 2 + 2), (int)(centreY - this.cardBack.getSize()[1] / 2 + 10));
+		cardDescription = new Text((int)(centreX - this.cardBack.getSize()[0] / 2 + 2), (int)(centreY - this.cardBack.getSize()[1] / 2 + 28));
+		
+		this.cardName.setAlpha(1);
+		this.cardDescription.setAlpha(1);
 	}
 	
 	public void displayCard(Card card) {
@@ -39,6 +70,7 @@ public class CardViewer implements Displayable, MouseRespondable {
 		this.setVisible(true);
 		this.setActive(true);
 		disableOther();
+		this.currentCard = card;
 	}
 	
 	public void hideCard() {
@@ -70,8 +102,11 @@ public class CardViewer implements Displayable, MouseRespondable {
 
 	@Override
 	public void drawMethod(Graphics2D drawShape) {
-		drawShape.setColor(Color.red);
-		drawShape.fillRect(500, 500, 300, 300);
+		this.cardBack.drawMethod(drawShape);
+		this.cardName.setText(currentCard.getNameText());
+		this.cardName.drawMethod(drawShape);
+		this.cardDescription.setText(currentCard.getDescriptionText());
+		this.cardDescription.drawMethod(drawShape);
 	}
 
 	@Override
