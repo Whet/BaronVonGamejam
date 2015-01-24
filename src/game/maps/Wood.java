@@ -10,6 +10,7 @@ import watoydoEngine.designObjects.display.ButtonSingle;
 import watoydoEngine.io.ReadWriter;
 import game.CardViewer;
 import game.GameMenu;
+import game.PlayerCollection;
 import game.TurnProcess;
 
 public class Wood extends GameMenu {

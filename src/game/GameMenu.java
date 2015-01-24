@@ -242,14 +242,7 @@ public abstract class GameMenu implements HardPaneDefineable {
 	protected abstract String getScenarioName();
 	
 	private BufferedImage getPlayerImage(Player player) {
-		try {
-			return ImageIO.read(ReadWriter.getResourceAsInputStream("buttonPlaceholder.png"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return BodyBuilder.getBody(player);
 	}
 
 	public abstract ButtonSingle getOptionOne() throws FileNotFoundException, IOException;
@@ -280,7 +273,7 @@ public abstract class GameMenu implements HardPaneDefineable {
 		
 		@Override
 		public boolean mU(Point mousePosition, MouseEvent e) {
-			cardViewer.displayCard(turnProcess.getCard());
+			cardViewer.displayCard(turnProcess.getCard(cardViewer));
 			return true;
 		}
 		

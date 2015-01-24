@@ -14,7 +14,7 @@ public class PlayerCollection {
 	private Player[] players;
 	
 	private PlayerCollection() {
-		this.players = new Player[]{new Player(), new Player(), new Player(), new Player(), new Player()};
+		this.players = new Player[]{new Player("head1.png","body1.png"), new Player("head1.png","body1.png"), new Player("head1.png","body1.png"), new Player("head1.png","body1.png"), new Player("head1.png","body1.png")};
 	}
 	
 	public Player getPlayer(int playerNumber) {
