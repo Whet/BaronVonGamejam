@@ -8,10 +8,39 @@ import javax.imageio.ImageIO;
 
 import watoydoEngine.designObjects.display.ButtonSingle;
 import watoydoEngine.io.ReadWriter;
+import game.CardViewer;
 import game.GameMenu;
+import game.TurnProcess;
 
 public class Wood extends GameMenu {
 
+	private CardViewer cardViewer;
+	private ChoiceButton optionOne;
+	private ChoiceButton optionTwo;
+	private ChoiceButton optionThree;
+	
+	private TurnProcess turnProcess;
+
+	public Wood() {
+		
+		this.turnProcess = new TurnProcess();
+		
+		try{
+			optionOne = new ChoiceButton("ADVENTURE", turnProcess, ImageIO.read(ReadWriter.getResourceAsInputStream("buttonPlaceholder.png")));
+			optionTwo = new ChoiceButton("REST", turnProcess, ImageIO.read(ReadWriter.getResourceAsInputStream("buttonPlaceholder.png")));
+			optionThree = new ChoiceButton("TRAVEL", turnProcess, ImageIO.read(ReadWriter.getResourceAsInputStream("buttonPlaceholder.png")));
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		this.cardViewer = new CardViewer(optionOne, optionTwo, optionThree);
+		
+		optionOne.setCardViewer(cardViewer);
+		optionTwo.setCardViewer(cardViewer);
+		optionThree.setCardViewer(cardViewer);
+	}
+	
 	@Override
 	protected BufferedImage getBackgroundImage() {
 		try {
@@ -30,31 +59,23 @@ public class Wood extends GameMenu {
 	}
 
 	@Override
-	public ButtonSingle getOptionOne() throws FileNotFoundException,
-			IOException {
-		return new ButtonSingle(ImageIO.read(ReadWriter.getResourceAsInputStream("buttonPlaceholder.png"))) {
-		};
+	public ButtonSingle getOptionOne() throws FileNotFoundException, IOException {
+		return optionOne;
 	}
 
 	@Override
-	public ButtonSingle getOptionTwo() throws FileNotFoundException,
-			IOException {
-		return new ButtonSingle(ImageIO.read(ReadWriter.getResourceAsInputStream("buttonPlaceholder.png"))) {
-		};
+	public ButtonSingle getOptionTwo() throws FileNotFoundException, IOException {
+		return optionTwo;
 	}
 
 	@Override
-	public ButtonSingle getOptionThree() throws FileNotFoundException,
-			IOException {
-		return new ButtonSingle(ImageIO.read(ReadWriter.getResourceAsInputStream("buttonPlaceholder.png"))) {
-		};
+	public ButtonSingle getOptionThree() throws FileNotFoundException, IOException {
+		return optionThree;
 	}
 
 	@Override
-	public ButtonSingle getOptionFour() throws FileNotFoundException,
-			IOException {
-		return new ButtonSingle(ImageIO.read(ReadWriter.getResourceAsInputStream("buttonPlaceholder.png"))) {
-		};
+	protected CardViewer getCardViewer() {
+		return this.cardViewer;
 	}
 
 }

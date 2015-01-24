@@ -1,6 +1,9 @@
 package game;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -72,6 +75,8 @@ public abstract class GameMenu implements HardPaneDefineable {
 		final ButtonSingle optionOne = getOptionOne();
 		final ButtonSingle optionTwo = getOptionTwo();
 		final ButtonSingle optionThree = getOptionThree();
+
+		CardViewer cardViewer = getCardViewer();
 		
 		int screenMidX = screenWidth / 2;
 		int buttonWidth = optionOne.getImage().getWidth();
@@ -117,6 +122,9 @@ public abstract class GameMenu implements HardPaneDefineable {
 		crowd.addButton(optionThree);
 		
 		crowd.addDisplayItem(titleText);
+		
+		crowd.addDisplayItem(cardViewer);
+		crowd.addMouseActionItem(cardViewer);
 		
 		final Timer animationTimer = new Timer();
 		
@@ -227,6 +235,8 @@ public abstract class GameMenu implements HardPaneDefineable {
 		}, 0, 1);
 	}
 	
+	protected abstract CardViewer getCardViewer();
+
 	protected abstract BufferedImage getBackgroundImage();
 
 	protected abstract String getScenarioName();
@@ -247,7 +257,44 @@ public abstract class GameMenu implements HardPaneDefineable {
 	public abstract ButtonSingle getOptionTwo() throws FileNotFoundException, IOException;
 	
 	public abstract ButtonSingle getOptionThree() throws FileNotFoundException, IOException;
-	
-	public abstract ButtonSingle getOptionFour() throws FileNotFoundException, IOException;
 
+	public static class ChoiceButton extends ButtonSingle {
+		
+		private Text text;
+		private TurnProcess turnProcess;
+		private CardViewer cardViewer;
+		
+		public ChoiceButton(String text, TurnProcess turnProcess, BufferedImage image) {
+			super(image);
+			this.turnProcess = turnProcess;
+			this.text = new Text(this.getLocation()[0] + 5, this.getLocation()[1] + this.getSize()[1] - 10, text);
+			this.text.setColour(Color.black);
+		}
+		
+		@Override
+		public void drawMethod(Graphics2D drawShape) {
+			super.drawMethod(drawShape);
+			text.setAlpha(this.getAlpha());
+			text.drawMethod(drawShape);
+		}
+		
+		@Override
+		public boolean mU(Point mousePosition, MouseEvent e) {
+			cardViewer.displayCard(turnProcess.getCard());
+			return true;
+		}
+		
+		@Override
+		public void setLocation(double x, double y) {
+			super.setLocation(x, y);
+			if(text != null)
+				this.text.setLocation(x + 5, y + this.getSize()[1] - 10);
+		}
+
+		public void setCardViewer(CardViewer cardViewer) {
+			this.cardViewer = cardViewer;
+		}
+		
+	}
+	
 }
